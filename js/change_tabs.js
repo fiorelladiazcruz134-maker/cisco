@@ -1,28 +1,41 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const productTab = document.getElementById('product-tab');
-  const imagesTab = document.getElementById('images-tab');
-  const informationSection = document.getElementById('information-section');
-  const imagesSection = document.getElementById('images-section');
+  const tabs = [
+    {
+      button: document.getElementById('tab-description'),
+      panel: document.getElementById('tab-content-description')
+    },
+    {
+      button: document.getElementById('tab-specs'),
+      panel: document.getElementById('tab-content-specs')
+    },
+    {
+      button: document.getElementById('tab-documentation'),
+      panel: document.getElementById('tab-content-documentation')
+    }
+  ];
 
-  if (productTab && imagesTab && informationSection && imagesSection) {
-    productTab.addEventListener('click', function () {
-      productTab.classList.add('bg-blue-600', 'text-white');
-      productTab.classList.remove('bg-gray-100', 'text-gray-700');
-      imagesTab.classList.add('bg-gray-100', 'text-gray-700');
-      imagesTab.classList.remove('bg-blue-600', 'text-white');
-      informationSection.classList.remove('hidden');
-      imagesSection.classList.add('hidden');
-    });
+  function activateTab(activeIndex) {
+    tabs.forEach((tab, index) => {
+      if (!tab.button || !tab.panel) return;
 
-    imagesTab.addEventListener('click', function () {
-      imagesTab.classList.add('bg-blue-600', 'text-white');
-      imagesTab.classList.remove('bg-gray-100', 'text-gray-700');
-      productTab.classList.add('bg-gray-100', 'text-gray-700');
-      productTab.classList.remove('bg-blue-600', 'text-white');
-      informationSection.classList.add('hidden');
-      imagesSection.classList.remove('hidden');
+      const isActive = index === activeIndex;
+      tab.button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      tab.button.classList.toggle('text-blue-600', isActive);
+      tab.button.classList.toggle('text-slate-600', !isActive);
+      tab.button.classList.toggle('border-blue-600', isActive);
+      tab.button.classList.toggle('border-transparent', !isActive);
+      tab.panel.classList.toggle('hidden', !isActive);
     });
   }
+
+  tabs.forEach((tab, index) => {
+    if (!tab.button) return;
+    tab.button.addEventListener('click', function () {
+      activateTab(index);
+    });
+  });
+
+  activateTab(0);
 });
 
 function viewImage(src) {
