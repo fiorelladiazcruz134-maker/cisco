@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.insertAdjacentHTML('afterbegin', data);
             initializeNavbar();
             initializeMobileMenu();
-            initializeSearchModal();
             addDynamicStyles();
         })
         .catch(error => console.error('Error loading navbar:', error));
@@ -34,17 +33,37 @@ function initializeMobileMenu() {
 
     if (!mobileMenuButton || !mobileMenu) return;
 
-    mobileMenuButton.addEventListener('click', () => {
+    function openMobileMenu() {
         mobileMenu.classList.remove('-translate-x-full');
-        mobileMenu.classList.remove('hidden');
+        mobileMenuButton.setAttribute('aria-expanded', 'true');
         if (menuOverlay) menuOverlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
-        
-        // Cambiar ícono
+
         const icon = mobileMenuButton.querySelector('i');
         if (icon) {
             icon.classList.remove('fa-bars');
             icon.classList.add('fa-times');
+        }
+    }
+
+    function closeMobileMenu() {
+        mobileMenu.classList.add('-translate-x-full');
+        mobileMenuButton.setAttribute('aria-expanded', 'false');
+        if (menuOverlay) menuOverlay.classList.add('hidden');
+        document.body.style.overflow = '';
+
+        const icon = mobileMenuButton.querySelector('i');
+        if (icon) {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    }
+
+    mobileMenuButton.addEventListener('click', () => {
+        if (mobileMenu.classList.contains('-translate-x-full')) {
+            openMobileMenu();
+        } else {
+            closeMobileMenu();
         }
     });
 
@@ -54,19 +73,6 @@ function initializeMobileMenu() {
 
     if (menuOverlay) {
         menuOverlay.addEventListener('click', closeMobileMenu);
-    }
-
-    function closeMobileMenu() {
-        mobileMenu.classList.add('-translate-x-full');
-        if (menuOverlay) menuOverlay.classList.add('hidden');
-        document.body.style.overflow = '';
-        
-        // Cambiar ícono
-        const icon = mobileMenuButton.querySelector('i');
-        if (icon) {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        }
     }
 }
 
@@ -78,7 +84,7 @@ function initializeSearchModal() {
 
     function openSearchModal() {
         if (searchModal) {
-            searchModal.classList.remove('none');
+            searchModal.classList.remove('hidden', 'none');
             searchModal.classList.add('anim');
             document.body.style.overflow = 'hidden';
         }
@@ -86,7 +92,7 @@ function initializeSearchModal() {
 
     function closeSearchModal() {
         if (searchModal) {
-            searchModal.classList.add('none');
+            searchModal.classList.add('hidden', 'none');
             document.body.style.overflow = '';
         }
     }
