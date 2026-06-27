@@ -106,6 +106,14 @@ header {
 }
 .logo span { color: var(--orange); }
 
+.logo-img,
+.footer-logo {
+  max-width: 220px;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
 /* hamburger */
 .menu-toggle {
   display: none;
